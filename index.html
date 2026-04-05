@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="claro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfólio de Prof. Francisco Araújo.">
+  <title>Portfólio — Prof. Francisco Araújo</title>
+  <link rel="stylesheet" href="css/style.css?v=final1">
+</head>
+<body class="v5-body">
+  <main class="v5-shell">
+    <section class="v5-home-card">
+      <header class="v5-hero">
+        <nav class="v5-navbar" aria-label="Menu principal">
+          <div class="v5-nav-wrap">
+            <a href="index.html" class="v5-brand">Francisco Araújo</a>
+
+            <button class="hamburger v5-hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false" type="button">
+              <span></span><span></span><span></span>
+            </button>
+
+            <div class="v5-nav-links" id="nav-links">
+              <a href="formacao.html">Formação</a>
+              <a href="portfolio.html">Portfólio</a>
+              <a href="contato.html">Contato</a>
+
+              <button class="v5-lang-toggle" id="btn-tema" aria-label="Alternar tema claro e escuro" title="Alternar tema" type="button">
+                <span class="lang-lock">⌂</span>
+                <span class="lang-text">pt</span>
+                <span class="lang-knob"></span>
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <div class="v5-top-line"></div>
+
+        <div class="v5-hero-content">
+          <div class="v5-hero-copy">
+            <h1>Sobre Mim</h1>
+            <p class="v5-hero-subtitle">Professor, pesquisador e desenvolvedor com foco em educação, software e inteligência artificial.</p>
+          </div>
+        </div>
+      </header>
+
+      <img src="images/hero-profile.png" alt="Francisco Araújo" class="v5-hero-profile-img">
+
+      <section class="v5-bottom-panel" aria-label="Resumo principal do portfólio">
+        <div class="v5-section-line"></div>
+
+        <div class="v5-info-cards">
+          <a class="v5-info-card-link" href="formacao.html" aria-label="Abrir página Formação">
+            <article class="v5-info-card">
+              <div class="v5-card-icon user-icon" aria-hidden="true"></div>
+              <h3>Formação</h3>
+              <div class="v5-card-line"></div>
+              <p>Minha trajetória acadêmica.</p>
+            </article>
+          </a>
+
+          <a class="v5-info-card-link" href="portfolio.html" aria-label="Abrir página Portfólio">
+            <article class="v5-info-card">
+              <div class="v5-card-icon edu-icon" aria-hidden="true"></div>
+              <h3>Portfólio</h3>
+              <div class="v5-card-line"></div>
+              <p>Meus projetos e trabalhos.</p>
+            </article>
+          </a>
+
+          <a class="v5-info-card-link" href="contato.html" aria-label="Abrir página Contato">
+            <article class="v5-info-card">
+              <div class="v5-card-icon contact-icon" aria-hidden="true"></div>
+              <h3>Contato</h3>
+              <div class="v5-card-line"></div>
+              <p>Fale comigo.</p>
+            </article>
+          </a>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    /* Trava scroll no html/body — home page deve caber em 1 tela */
+    document.documentElement.style.height = '100dvh';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.height = '100dvh';
+    document.body.style.overflow = 'hidden';
+  </script>
+</body>
+</html>
