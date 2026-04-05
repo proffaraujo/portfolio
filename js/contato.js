@@ -1,13 +1,11 @@
-/**
- * contato.js — Validação e envio simulado do formulário de contato
- * Francisco Araújo · Portfolio · 2026
- */
+// contato.js — validação e envio simulado do formulário de contato
+// só roda nessa página; main.js cuida do resto
+// Autor: Francisco Araújo - Trabalho UNINTER.
 
 "use strict";
 
-/* ─────────────────────────────────────────
-   1. SELETORES
-───────────────────────────────────────── */
+// --- SELETORES ---
+
 const form        = document.getElementById("form-contato");
 const campoNome   = document.getElementById("campo-nome");
 const campoEmail  = document.getElementById("campo-email");
@@ -15,37 +13,27 @@ const campoMsg    = document.getElementById("campo-mensagem");
 const btnSubmit   = form.querySelector(".btn-submit");
 
 const modalSucesso   = document.getElementById("modal-sucesso");
-const btnFecharModal = document.getElementById("btn-fechar-modal");   // ver HTML atualizado
+const btnFecharModal = document.getElementById("btn-fechar-modal");
 
-/* ─────────────────────────────────────────
-   2. UTILITÁRIOS DE VALIDAÇÃO
-───────────────────────────────────────── */
 
-/**
- * Verifica formato de e-mail via RegEx.
- * Aceita padrão RFC 5322 simplificado: usuario@dominio.tld
- */
+// --- VALIDAÇÃO ---
+
+// regex simples: tem algo @ tem algo . tem algo com 2+ chars — serve pra maioria dos casos
 function emailValido(valor) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   return re.test(valor.trim());
 }
 
-/**
- * Marca um campo como inválido e exibe a mensagem de erro associada.
- * @param {HTMLElement} campo  – input ou textarea
- */
+// pinta o campo de vermelho e mostra o span de erro que fica escondido no HTML
 function marcarInvalido(campo) {
   campo.classList.add("invalido");
   campo.classList.remove("valido");
   const erro = campo.parentElement.querySelector(".msg-erro");
   if (erro) erro.classList.add("visivel");
-  campo.setAttribute("aria-invalid", "true");
+  campo.setAttribute("aria-invalid", "true"); // leitores de tela vão reclamar se não tiver isso
 }
 
-/**
- * Marca um campo como válido e oculta qualquer erro visível.
- * @param {HTMLElement} campo  – input ou textarea
- */
+// volta ao normal — tira vermelho, coloca borda verde, esconde o erro
 function marcarValido(campo) {
   campo.classList.remove("invalido");
   campo.classList.add("valido");
@@ -54,14 +42,11 @@ function marcarValido(campo) {
   campo.setAttribute("aria-invalid", "false");
 }
 
-/**
- * Executa todas as regras de validação.
- * Retorna true somente se todos os campos forem válidos.
- */
+// roda nos três campos e retorna false se qualquer um falhar
 function validarFormulario() {
   let tudo_ok = true;
 
-  /* ── Nome: obrigatório, mínimo 3 caracteres ── */
+  // nome: no mínimo 3 chars — "Jo" não conta
   if (campoNome.value.trim().length < 3) {
     marcarInvalido(campoNome);
     tudo_ok = false;
@@ -69,7 +54,7 @@ function validarFormulario() {
     marcarValido(campoNome);
   }
 
-  /* ── E-mail: obrigatório + formato RFC ── */
+  // email: tem que passar no regex
   if (!emailValido(campoEmail.value)) {
     marcarInvalido(campoEmail);
     tudo_ok = false;
@@ -77,7 +62,7 @@ function validarFormulario() {
     marcarValido(campoEmail);
   }
 
-  /* ── Mensagem: obrigatória, mínimo 10 caracteres ── */
+  // mensagem: no mínimo 10 chars — evita envios de "oi" e ponto final
   if (campoMsg.value.trim().length < 10) {
     marcarInvalido(campoMsg);
     tudo_ok = false;
@@ -88,16 +73,19 @@ function validarFormulario() {
   return tudo_ok;
 }
 
-/* ─────────────────────────────────────────
-   3. VALIDAÇÃO EM TEMPO REAL (ao sair do campo)
-───────────────────────────────────────── */
+
+// --- VALIDAÇÃO EM TEMPO REAL ---
+
+// valida campo a campo quando o usuário sai de um campo (blur)
+// e limpa o erro visual assim que começa a digitar de novo
 [campoNome, campoEmail, campoMsg].forEach((campo) => {
 
-  /* Valida ao perder o foco (blur) */
   campo.addEventListener("blur", () => {
     if (campo === campoEmail) {
+      // email tem regra própria
       emailValido(campo.value) ? marcarValido(campo) : marcarInvalido(campo);
     } else {
+      // nome >= 3, mensagem >= 10
       const minimo = campo === campoMsg ? 10 : 3;
       campo.value.trim().length >= minimo
         ? marcarValido(campo)
@@ -105,7 +93,7 @@ function validarFormulario() {
     }
   });
 
-  /* Remove o erro assim que o usuário começa a digitar */
+  // usuário começou a corrigir — tira o vermelho pra não ficar gritando
   campo.addEventListener("input", () => {
     if (campo.classList.contains("invalido")) {
       campo.classList.remove("invalido");
@@ -115,24 +103,24 @@ function validarFormulario() {
   });
 });
 
-/* ─────────────────────────────────────────
-   4. ENVIO DO FORMULÁRIO
-───────────────────────────────────────── */
+
+// --- SUBMIT ---
+
 form.addEventListener("submit", (evento) => {
-  evento.preventDefault();   // impede recarregamento da página
+  evento.preventDefault(); // sem isso a página recarrega e perde tudo
 
   if (!validarFormulario()) {
-    /* Foca no primeiro campo inválido para acessibilidade */
+    // manda o foco pro primeiro campo com problema
     const primeiroInvalido = form.querySelector(".invalido");
     if (primeiroInvalido) primeiroInvalido.focus();
     return;
   }
 
-  /* ── Feedback visual: estado de carregamento ── */
+  // desabilita o botão pra não dar duplo envio
   btnSubmit.disabled    = true;
   btnSubmit.textContent = "Enviando…";
 
-  /* ── Simulação de latência de rede (1,5 s) ── */
+  // simula 1.5s de latência de rede — aqui entraria o fetch() real
   setTimeout(() => {
     limparFormulario();
     exibirModal();
@@ -142,9 +130,10 @@ form.addEventListener("submit", (evento) => {
   }, 1500);
 });
 
-/* ─────────────────────────────────────────
-   5. LIMPAR FORMULÁRIO
-───────────────────────────────────────── */
+
+// --- LIMPAR FORMULÁRIO ---
+
+// reseta os valores e remove as classes de estado (verde/vermelho)
 function limparFormulario() {
   form.reset();
   [campoNome, campoEmail, campoMsg].forEach((campo) => {
@@ -153,36 +142,32 @@ function limparFormulario() {
   });
 }
 
-/* ─────────────────────────────────────────
-   6. MODAL DE CONFIRMAÇÃO
-───────────────────────────────────────── */
+
+// --- MODAL ---
+
 function exibirModal() {
   modalSucesso.classList.add("ativo");
   modalSucesso.setAttribute("aria-hidden", "false");
-
-  /* Foco acessível no botão de fechar */
-  if (btnFecharModal) btnFecharModal.focus();
+  if (btnFecharModal) btnFecharModal.focus(); // foco acessível ao abrir
 }
 
 function fecharModal() {
   modalSucesso.classList.remove("ativo");
   modalSucesso.setAttribute("aria-hidden", "true");
-
-  /* Devolve o foco ao botão de envio */
-  btnSubmit.focus();
+  btnSubmit.focus(); // devolve o foco pra quem abriu o modal
 }
 
-/* Fecha pelo botão interno do modal */
+// botão "Fechar" dentro do modal
 if (btnFecharModal) {
   btnFecharModal.addEventListener("click", fecharModal);
 }
 
-/* Fecha clicando no overlay (fora da caixa) */
+// clicou no overlay escuro fora da caixa
 modalSucesso.addEventListener("click", (e) => {
   if (e.target === modalSucesso) fecharModal();
 });
 
-/* Fecha com a tecla Escape */
+// Escape fecha — padrão de UX esperado em qualquer modal
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && modalSucesso.classList.contains("ativo")) {
     fecharModal();
