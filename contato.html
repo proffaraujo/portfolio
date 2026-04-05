@@ -6,58 +6,240 @@
   <meta name="description" content="Contato — Francisco Araújo.">
   <title>Contato — Francisco Araújo</title>
   <link rel="stylesheet" href="css/style.css?v=final1">
+
+  <!-- ── Estilos para validação e modal ── -->
+  <style>
+    /* ── Campos válidos / inválidos ── */
+    .form-group input.invalido,
+    .form-group textarea.invalido {
+      border-color: #e53e3e;
+      background-color: #fff5f5;
+      outline: none;
+    }
+    .form-group input.valido,
+    .form-group textarea.valido {
+      border-color: #38a169;
+    }
+
+    /* ── Mensagem de erro inline ── */
+    .msg-erro {
+      display: none;           /* oculta por padrão */
+      color: #e53e3e;
+      font-size: 0.82rem;
+      margin-top: 4px;
+    }
+    .msg-erro.visivel {
+      display: block;
+    }
+
+    /* ── Botão de envio: estado de carregamento ── */
+    .btn-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* ── Overlay do modal ── */
+    .modal-overlay {
+      display: none;             /* oculto por padrão */
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.ativo {
+      display: flex;             /* exibe ao receber a classe .ativo */
+    }
+
+    /* ── Caixa interna do modal ── */
+    .modal-caixa {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      animation: entrar 0.25s ease;
+    }
+    [data-tema="escuro"] .modal-caixa {
+      background: #1e2130;
+      color: #e2e8f0;
+    }
+
+    @keyframes entrar {
+      from { opacity: 0; transform: translateY(-18px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)     scale(1);    }
+    }
+
+    .modal-caixa h3      { margin-bottom: 0.5rem; font-size: 1.25rem; }
+    .modal-caixa p       { margin-bottom: 1.25rem; color: #555; }
+    [data-tema="escuro"] .modal-caixa p { color: #a0aec0; }
+
+    .modal-caixa .icone-sucesso {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .btn-fechar-modal {
+      background: #4a6cf7;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.6rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-fechar-modal:hover  { background: #3a54d4; }
+    .btn-fechar-modal:focus  { outline: 3px solid #a2b3e0; outline-offset: 2px; }
+  </style>
 </head>
 <body>
+
+  <!-- ════════════════════════════════════
+       CABEÇALHO
+  ════════════════════════════════════ -->
   <header class="topbar">
     <div class="nav-wrap">
       <div class="brand">
         <a href="index.html" class="logo">Francisco Araújo</a>
         <span class="role"> </span>
       </div>
-      <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false" type="button"><span></span><span></span><span></span></button>
+      <button class="hamburger" id="hamburger"
+              aria-label="Abrir menu" aria-expanded="false" type="button">
+        <span></span><span></span><span></span>
+      </button>
       <div class="nav-links" id="nav-links">
         <a href="index.html">Sobre mim</a>
         <a href="formacao.html">Formação</a>
         <a href="portfolio.html">Portfólio</a>
         <a href="contato.html" class="ativo">Contato</a>
-        <div class="nav-actions"><button class="btn-tema" id="btn-tema" aria-label="Alternar tema" type="button">🌙</button></div>
+        <div class="nav-actions">
+          <button class="btn-tema" id="btn-tema"
+                  aria-label="Alternar tema" type="button">🌙</button>
+        </div>
       </div>
     </div>
   </header>
 
+  <!-- ════════════════════════════════════
+       CONTEÚDO PRINCIPAL
+  ════════════════════════════════════ -->
   <main class="section-wrap">
+
     <section class="page-hero" style="background:#a2b3e0">
       <h1>Contato</h1>
       <p>Canal direto para contato profissional e acadêmico comigo.</p>
     </section>
 
     <section class="section">
-      <h2>  </h2>
-      <p class="lead">  </p>
+      <h2>&nbsp;</h2>
+      <p class="lead">&nbsp;</p>
+
       <div class="form-grid">
+
+        <!-- ── Formulário ── -->
         <article class="card">
           <form id="form-contato" novalidate>
-            <div class="form-group"><label for="campo-nome">Nome *</label><input id="campo-nome" type="text" placeholder="Seu nome completo"><span class="msg-erro">Por favor, informe seu nome.</span></div>
-            <div class="form-group"><label for="campo-email">E-mail *</label><input id="campo-email" type="email" placeholder="seuemail@exemplo.com"><span class="msg-erro">Por favor, informe um e-mail válido.</span></div>
-            <div class="form-group"><label for="campo-mensagem">Mensagem *</label><textarea id="campo-mensagem" placeholder="Escreva sua mensagem..."></textarea><span class="msg-erro">Por favor, escreva sua mensagem.</span></div>
+
+            <div class="form-group">
+              <label for="campo-nome">Nome *</label>
+              <input id="campo-nome" type="text"
+                     placeholder="Seu nome completo"
+                     aria-required="true" aria-invalid="false">
+              <span class="msg-erro" role="alert">
+                Por favor, informe seu nome completo (mínimo 3 caracteres).
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="campo-email">E-mail *</label>
+              <input id="campo-email" type="email"
+                     placeholder="seuemail@exemplo.com"
+                     aria-required="true" aria-invalid="false">
+              <span class="msg-erro" role="alert">
+                Por favor, informe um e-mail válido (ex.: faraujo@gmail.com).
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="campo-mensagem">Mensagem *</label>
+              <textarea id="campo-mensagem"
+                        placeholder="Escreva sua mensagem..."
+                        aria-required="true" aria-invalid="false"></textarea>
+              <span class="msg-erro" role="alert">
+                Por favor, escreva sua mensagem (mínimo 10 caracteres).
+              </span>
+            </div>
+
             <button class="btn-submit" type="submit">Enviar mensagem</button>
+
           </form>
         </article>
+
+        <!-- ── Outros canais ── -->
         <aside class="card">
           <h3>Outros canais</h3>
           <div class="contact-list">
-            <div class="contact-item"><div class="icon">✉</div><div><strong>E-mail</strong><p>prof.faraujo@gmail.com</p></div></div>
-            <div class="contact-item"><div class="icon">⌂</div><div><strong>Instituição</strong><p>ISINTESE</p></div></div>
-            <div class="contact-item"><div class="icon">⌘</div><div><strong>GitHub</strong><p><a href="https://github.com/proffaraujo/portfolio.git" target="_blank" rel="noopener">github.com/proffaraujo/portfolio.git</a></p></div></div>
-            <div class="contact-item"><div class="icon">⌖</div><div><strong>Localização</strong><p>Fortaleza, Ceará — Brasil</p></div></div>
+            <div class="contact-item">
+              <div class="icon">✉</div>
+              <div><strong>E-mail</strong><p>prof.faraujo@gmail.com</p></div>
+            </div>
+            <div class="contact-item">
+              <div class="icon">⌂</div>
+              <div><strong>Instituição</strong><p>ISINTESE</p></div>
+            </div>
+            <div class="contact-item">
+              <div class="icon">⌘</div>
+              <div>
+                <strong>GitHub</strong>
+                <p>
+                  <a href="https://github.com/proffaraujo/portfolio.git"
+                     target="_blank" rel="noopener">
+                    github.com/proffaraujo/portfolio.git
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="icon">⌖</div>
+              <div><strong>Localização</strong><p>Fortaleza, Ceará — Brasil</p></div>
+            </div>
           </div>
         </aside>
+
       </div>
     </section>
   </main>
 
-  <div class="modal-overlay" id="modal-sucesso" role="dialog" aria-modal="true" aria-label="Mensagem enviada">
+  <!-- ════════════════════════════════════
+       MODAL DE CONFIRMAÇÃO
+  ════════════════════════════════════ -->
+  <div class="modal-overlay"
+       id="modal-sucesso"
+       role="dialog"
+       aria-modal="true"
+       aria-label="Mensagem enviada com sucesso"
+       aria-hidden="true">
     <div class="modal-caixa">
+      <span class="icone-sucesso" aria-hidden="true">✅</span>
       <h3>Mensagem enviada com sucesso!</h3>
       <p>Obrigado pelo contato. Retornarei o mais breve possível.</p>
-      <button clas
+      <button class="btn-fechar-modal"
+              id="btn-fechar-modal"
+              type="button">
+        Fechar
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       SCRIPTS
+  ════════════════════════════════════ -->
+  <script src="js/contato.js"></script>
+
+</body>
+</html>
