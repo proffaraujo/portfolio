@@ -2,8 +2,8 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#D8E7FD;
-  --panel:#D8E7FD;
+  --bg:#ececf1;
+  --panel:#f5f5fa;
   --surface:#ffffff;
   --surface-soft:#f7f7fb;
   --text:#273042;
